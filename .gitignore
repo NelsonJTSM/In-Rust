@@ -1,0 +1,5 @@
+# Remove rust targets
+**/target/
+
+# Removes tmp file that stores important info
+tmp/**
