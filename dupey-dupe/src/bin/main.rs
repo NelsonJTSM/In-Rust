@@ -5,6 +5,20 @@ fn main() {
     let args: LinkedList<String> = env::args().collect();
 }
 
+fn multiple_dupe(list: &LinkedList<String>) -> bool {
+    let mut prev_iter = list.into_iter();
+    for item in list.into_iter().skip(1) {
+        // We are able to unwrap() because prev_iter should always be one String
+        // behind the for loop's iterator, therefore it will never be None.
+        let prev = prev_iter.next().unwrap();
+        
+        if item == "dupe" && item == prev {
+            return true;
+        }
+    }
+    false
+}
+
 fn last_duplicate<'a>(list: &'a LinkedList<String>) -> Option<&'a str> {
     for (i, item) in list.into_iter().rev().enumerate() {
         for other in list.into_iter().rev().skip(i + 1) {
@@ -44,6 +58,32 @@ mod tests {
 
             let duplicate = last_duplicate(&args_as_string);
             assert_eq!(duplicate, expected, "Error on arg_num = {}", arg_num);
+        }
+    }
+
+    #[test]
+    fn correct_multiple_dupe() {
+        let test_args = vec![
+            ("chocolate lava cake lava cake", false),
+            ("chocolate lava cake cake lava", false),
+            ("chocolate lava cake cake cake", false),
+            ("chocolate lava lava cake cake", false),
+            ("chocolate lava dupe cake dupe cake cake", false),
+            ("be careful with this dupe", false),
+            ("chocolate lava dupe dupe cake dupe cake cake chocolate", true),
+            ("cupcake cupcake dupe dupe dupe dupe dupe", true),
+        ];
+
+        for (arg_num, element) in test_args.iter().enumerate() {
+            let arg_num = arg_num + 1;
+            let (args, expected) = *element;
+            
+            let args_as_str: LinkedList<&str> = args.split_whitespace().collect();
+            let args_as_string: LinkedList<String> =
+                args_as_str.into_iter().map(|x| String::from(x)).collect();
+
+            let has_double_dupe = multiple_dupe(&args_as_string);
+            assert_eq!(has_double_dupe, expected, "Error on arg_num = {}", arg_num);
         }
     }
 }
