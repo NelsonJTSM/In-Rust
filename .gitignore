@@ -3,3 +3,4 @@
 
 # Removes tmp file that stores important info
 tmp/**
+intructions/**
