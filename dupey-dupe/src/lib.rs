@@ -1,9 +1,9 @@
 pub fn difficulty_rating() -> f32{
-    2.0
+    1.5
 }
 
 pub fn hours_spent() -> f32 {
-    3.0
+    7.0
 }
 
 mod tests {
